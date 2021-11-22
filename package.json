@@ -2,9 +2,12 @@
   "name": "xavi_back-final-project-202109",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "debug": "nodemon --inspect-brk .",
+    "start-dev": "nodemon -q .",
+    "test": "jest --watchAll --collect-coverage",
     "prepare": "husky install"
   },
   "repository": {
