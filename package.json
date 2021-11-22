@@ -8,6 +8,7 @@
     "debug": "nodemon --inspect-brk .",
     "start-dev": "nodemon -q .",
     "test": "jest --watchAll --collect-coverage",
+    "ts": "npx tsc --watch",
     "prepare": "husky install"
   },
   "repository": {
