@@ -1,4 +1,4 @@
-const { Schema, model, Types } = require("mongoose");
+import { Schema, model, Types } from "mongoose";
 
 interface User {
   name: string;
@@ -9,7 +9,7 @@ interface User {
   yourRoutes?: Array<string>;
 }
 
-const userSchema: User = new Schema({
+const userSchema: Schema<User> = new Schema({
   name: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true },
@@ -18,6 +18,6 @@ const userSchema: User = new Schema({
   yourRoutes: { types: [Types.ObjectId] },
 });
 
-const UserModel: User = model("user", userSchema, "users");
+const UserModel = model<User>("user", userSchema, "users");
 
-export = { UserModel };
+export default UserModel;

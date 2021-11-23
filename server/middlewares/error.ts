@@ -1,15 +1,17 @@
-import * as express from "express";
+import express from "express";
 
-const debug = require("debug")("hiking:errors");
-const chalk = require("chalk");
-const { ValidationError } = require("express-validation");
+import Debug from "debug";
+import chalk from "chalk";
+import { ValidationError } from "express-validation";
 
-const notFoundErrorHandler = (req, res) => {
+const debug = Debug("hiking:errors");
+
+export const notFoundErrorHandler = (req, res) => {
   debug(chalk.red("Not found (404)"));
   res.status(404).json({ error: "Endpoint not found 404" });
 };
 
-const generalErrorHandler = (
+export const generalErrorHandler = (
   error: { message: String; code: number },
   req: express.Request,
   res: express.Response,
@@ -24,5 +26,3 @@ const generalErrorHandler = (
   const message = error.code ? error.message : "General pete";
   res.status(error.code || 500).json({ error: message });
 };
-
-export = { notFoundErrorHandler, generalErrorHandler };

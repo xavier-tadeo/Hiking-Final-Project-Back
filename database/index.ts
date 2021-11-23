@@ -1,6 +1,8 @@
-const debug = require("debug")("hiking:DB");
-const chalk = require("chalk");
-const mongoose = require("mongoose");
+import Debug from "debug";
+import chalk from "chalk";
+import mongoose from "mongoose";
+
+const debug = Debug("hiking:DB");
 
 const connectDB = (stringConnection) =>
   new Promise<void>((resolve, reject) => {
@@ -28,4 +30,4 @@ const connectDB = (stringConnection) =>
     });
   });
 
-export = { connectDB };
+export default connectDB;
