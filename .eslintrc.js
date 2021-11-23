@@ -22,5 +22,6 @@ module.exports = {
     "consistent-return": "off",
 
     "no-console": "off",
+    "import/first": "off",
   },
 };
