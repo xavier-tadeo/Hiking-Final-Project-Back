@@ -15,7 +15,7 @@ const userSchema: Schema<User> = new Schema({
   email: { type: String, required: true },
   somethingAboutYou: { type: String },
   favorite: { type: [Types.ObjectId] },
-  yourRoutes: { types: [Types.ObjectId] },
+  yourRoutes: { type: [Types.ObjectId] },
 });
 
 const UserModel = model<User>("user", userSchema, "users");

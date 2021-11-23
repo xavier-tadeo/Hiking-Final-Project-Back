@@ -9,7 +9,7 @@ class ErrorCode extends Error {
   code: number | undefined;
 }
 
-const userCreate = async (req, res, next) => {
+export const userCreate = async (req, res, next) => {
   const { name, password, email } = req.body;
   try {
     const newUser = await UserModel.create({
@@ -25,17 +25,15 @@ const userCreate = async (req, res, next) => {
   }
 };
 
-const userLogin = async (req, res, next) => {
+export const userLogin = async (req, res, next) => {
   const { name, password } = req.body;
   const user = await UserModel.findOne({ name });
-
   if (!user) {
     const error = new ErrorCode("Wrong no found!");
     error.code = 401;
     next(error);
   } else {
     const goodpassword = await bcrypt.compare(password, user.password);
-
     if (!goodpassword) {
       const error = new ErrorCode("Something wrong!!");
       error.code = 401;
@@ -46,12 +44,10 @@ const userLogin = async (req, res, next) => {
           name: user.name,
           id: user.id,
         },
-        process.env.JWT_SECRET
+        process.env.SECRET
       );
 
       res.json({ token });
     }
   }
 };
-
-export default { userCreate, userLogin };

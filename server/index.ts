@@ -7,6 +7,7 @@ import morgan from "morgan";
 import Debug from "debug";
 
 import { notFoundErrorHandler, generalErrorHandler } from "./middlewares/error";
+import userRoutes from "./routes/userRoutes";
 
 const debug = Debug("hiking:server");
 
