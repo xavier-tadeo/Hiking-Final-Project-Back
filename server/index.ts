@@ -6,9 +6,14 @@ import morgan from "morgan";
 
 import Debug from "debug";
 
+import { notFoundErrorHandler, generalErrorHandler } from "./middlewares/error";
+
 const debug = Debug("hiking:server");
 
 const app = express();
+app.use(cors());
+app.use(morgan("dev"));
+app.use(express.json());
 
 const initializeServer = (port) =>
   new Promise((resolve) => {
@@ -25,8 +30,9 @@ const initializeServer = (port) =>
     });
   });
 
-app.use(cors());
-app.use(morgan("dev"));
-app.use(express.json());
+app.use("/user", userRoutes);
+
+app.use(notFoundErrorHandler);
+app.use(generalErrorHandler);
 
 export default initializeServer;
