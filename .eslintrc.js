@@ -13,7 +13,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: "module",
   },
-
+  ignorePatterns: ["/*.config.js"],
   plugins: ["@typescript-eslint"],
   rules: {
     "no-param-reassign": "off",
