@@ -4,6 +4,7 @@ module.exports = {
     commonjs: true,
     es2021: true,
     jest: true,
+    node: true,
   },
   extends: ["airbnb-base", "airbnb-typescript/base", "prettier"],
   parser: "@typescript-eslint/parser",

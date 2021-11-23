@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model } from "mongoose";
 
 interface Hiking {
   title: string;
@@ -13,7 +13,7 @@ interface Hiking {
   dificulty: number;
 }
 
-const hikingSchema: Hiking = new Schema({
+const hikingSchema: Schema<Hiking> = new Schema({
   title: { type: String, required: true },
   img: { type: String, required: true },
   description: { type: String, required: true },
@@ -27,6 +27,6 @@ const hikingSchema: Hiking = new Schema({
   },
 });
 
-const HikingModel: Hiking = model("hiking", hikingSchema, "hikings");
+const HikingModel = model<Hiking>("hiking", hikingSchema, "hikings");
 
 export = { HikingModel };
