@@ -10,6 +10,7 @@
     "test": "jest",
     "test-watch": "jest --watchAll --collect-coverage",
     "ts": "npx tsc --watch",
+    "build": "tsc",
     "prepare": "husky install"
   },
   "repository": {
