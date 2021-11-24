@@ -51,3 +51,21 @@ export const userLogin = async (req, res, next) => {
     }
   }
 };
+
+export const userDelete = async (req, res, next) => {
+  const { idUser } = req.params;
+  try {
+    const searchUser = await UserModel.findByIdAndDelete(idUser);
+    if (searchUser) {
+      res.json({ id: searchUser.id });
+    } else {
+      const error = new ErrorCode("User not found");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.code = 400;
+    error.message = "Bad request";
+    next(error);
+  }
+};
