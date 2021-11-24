@@ -24,4 +24,19 @@ const hikeCreate = async (
   }
 };
 
+export const hikeGet = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const hikingAll = await HikingModel.find();
+    res.status(202).json(hikingAll);
+  } catch (error) {
+    error.code = 404;
+    error.message = "Not found anything!";
+    next(error);
+  }
+};
+
 export default hikeCreate;
