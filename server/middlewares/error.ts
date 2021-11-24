@@ -12,7 +12,7 @@ export const notFoundErrorHandler = (req, res) => {
 };
 
 export const generalErrorHandler = (
-  error: { message: String; code: number },
+  error: { message: string; code: number },
   req: express.Request,
   res: express.Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
