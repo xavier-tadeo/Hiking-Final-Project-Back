@@ -1,24 +1,26 @@
 import { Schema, model } from "mongoose";
 
-interface Hiking {
-  title: string;
-  img: string;
-  description: string;
-  userId: string;
-  map: string;
-  stadistics: object;
+interface Stadistics {
   distance: string;
   time: string;
   elevation: string;
   dificulty: number;
 }
+interface Hiking {
+  title: string;
+  description: string;
+  map: number;
+  images: Array<string>;
+
+  stadistics: Stadistics;
+}
 
 const hikingSchema: Schema<Hiking> = new Schema({
   title: { type: String, required: true },
-  img: { type: String, required: true },
   description: { type: String, required: true },
-  userId: { type: String },
-  map: { type: String, required: true },
+  map: { type: Number, required: true },
+  images: { type: [String], required: true },
+
   stadistics: {
     distance: { type: String, require: true },
     time: { type: String, require: true },
@@ -29,4 +31,4 @@ const hikingSchema: Schema<Hiking> = new Schema({
 
 const HikingModel = model<Hiking>("hiking", hikingSchema, "hikings");
 
-export = { HikingModel };
+export default HikingModel;
