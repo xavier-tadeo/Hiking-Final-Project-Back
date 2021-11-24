@@ -13,6 +13,6 @@ const router = express.Router();
 router.post("/register", userCreate);
 router.post("/login", auth, userLogin);
 router.delete("/delete/:idUser", userDelete);
-router.patch("/update", userUpdate);
+router.patch("/update/:idUser", userUpdate);
 
 export default router;
