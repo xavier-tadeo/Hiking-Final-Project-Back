@@ -64,3 +64,21 @@ export const hikeDelete = async (
     next(error);
   }
 };
+
+export const hikeUpdate = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  const { hikeId } = req.params;
+  try {
+    const updateHike = await HikingModel.findByIdAndUpdate(hikeId, req.body, {
+      new: true,
+    });
+    res.json(updateHike);
+  } catch (error) {
+    error.code = 404;
+    error.message = "Not found hike???";
+    next(error);
+  }
+};
