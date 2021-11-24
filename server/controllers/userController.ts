@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import express from "express";
 import UserModel from "../../database/models/user";
 
 class ErrorCode extends Error {
@@ -66,6 +67,24 @@ export const userDelete = async (req, res, next) => {
   } catch (error) {
     error.code = 400;
     error.message = "Bad request";
+    next(error);
+  }
+};
+
+export const userUpdate = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  const { idUser } = req.params;
+  try {
+    const updateUser = await UserModel.findByIdAndUpdate(idUser, req.body, {
+      new: true,
+    });
+    res.json(updateUser);
+  } catch (error) {
+    error.code = 404;
+    error.message = "Don't change user";
     next(error);
   }
 };
