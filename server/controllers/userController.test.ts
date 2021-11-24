@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../../database/models/user";
 
-import { userCreate, userLogin } from "./userController";
+import { userCreate, userDelete, userLogin } from "./userController";
 
 jest.mock("../../database/models/user");
 jest.mock("bcrypt");
@@ -55,7 +55,7 @@ describe("Given a userCreate function", () => {
 });
 
 describe("Given a userLogin function", () => {
-  describe("When receives a request without username", () => {
+  describe("When receives a request without name", () => {
     test("It should invoke next function with error, message 'Wrong no found!' and code 401", async () => {
       const req = {
         body: jest.fn(),
@@ -69,11 +69,11 @@ describe("Given a userLogin function", () => {
       expect(next).toHaveBeenCalledWith(error);
     });
   });
-  describe("When receives a username but not good password", () => {
+  describe("When receives a name but not good password", () => {
     test("It should invoke the next function with error, message 'Something wrong!!'", async () => {
       const req = {
         body: {
-          username: "Yoooo",
+          name: "Yoooo",
         },
       };
       const next = jest.fn();
@@ -86,10 +86,10 @@ describe("Given a userLogin function", () => {
       expect(next).toHaveBeenCalledWith(error);
     });
   });
-  describe("When receives a good username and password", () => {
+  describe("When receives a good name and password", () => {
     test("It should with invoke a res.json with token", async () => {
       UserModel.findOne = jest.fn().mockResolvedValue({
-        username: "Arlet",
+        name: "Arlet",
         password: "Arlet",
       });
       bcrypt.compare = jest.fn().mockResolvedValue(true);
@@ -111,6 +111,64 @@ describe("Given a userLogin function", () => {
       await userLogin(req, res, null);
 
       expect(res.json).toHaveBeenCalledWith(expectedResponse);
+    });
+  });
+});
+
+describe("Given a deleteUser function", () => {
+  describe("When it receives a request with an id 1, a response and a next function", () => {
+    test("Then it should call the UserModel.findByIdAndDelete with a 1 and delete", async () => {
+      const idUser = 1;
+      const req = {
+        params: {
+          idUser,
+        },
+      };
+      const res = {
+        json: () => {},
+      };
+      const next = () => {};
+      UserModel.findByIdAndDelete = jest.fn().mockResolvedValue({});
+
+      await userDelete(req, res, next);
+      expect(UserModel.findByIdAndDelete).toHaveBeenCalledWith(idUser);
+    });
+  });
+
+  describe("And UserModel.findByIdAndDelete rejects", () => {
+    test("Then it should call next with an error", async () => {
+      const error = {};
+      UserModel.findByIdAndDelete = jest.fn().mockRejectedValue(error);
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await userDelete(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(error).toHaveProperty("code");
+    });
+  });
+
+  describe("And UserModel.findByIdAndDelete returns undefined", () => {
+    test("Then it should call next with an error", async () => {
+      const error = new Error("User not found");
+      UserModel.findByIdAndDelete = jest.fn().mockResolvedValue(undefined);
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await userDelete(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 });
