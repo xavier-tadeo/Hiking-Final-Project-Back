@@ -8,6 +8,7 @@ import Debug from "debug";
 
 import { notFoundErrorHandler, generalErrorHandler } from "./middlewares/error";
 import userRoutes from "./routes/userRoutes";
+import hikeRoutes from "./routes/hikeRoutes";
 
 const debug = Debug("hiking:server");
 
@@ -32,6 +33,7 @@ const initializeServer = (port) =>
   });
 
 app.use("/user", userRoutes);
+app.use("/hike", hikeRoutes);
 
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
