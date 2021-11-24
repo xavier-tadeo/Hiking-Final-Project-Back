@@ -1,12 +1,18 @@
 import dotenv from "dotenv";
 
 dotenv.config();
+import { Response, Request } from "express";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../../database/models/user";
 
-import { userCreate, userDelete, userLogin } from "./userController";
+import {
+  userCreate,
+  userDelete,
+  userLogin,
+  userUpdate,
+} from "./userController";
 
 jest.mock("../../database/models/user");
 jest.mock("bcrypt");
@@ -167,6 +173,57 @@ describe("Given a deleteUser function", () => {
       const next = jest.fn();
 
       await userDelete(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given userUpdate function", () => {
+  describe("When it receives a req.params with a userId for change something", () => {
+    test("It should invoke a res.json with change user", async () => {
+      const existingUser = {
+        id: "10",
+        name: "Arlet",
+        password: "Arlet",
+        email: "arlet@arlet.com",
+      };
+      const res = {} as Response;
+      const req = {} as Request;
+      res.status = jest.fn().mockReturnThis();
+      res.json = jest.fn().mockReturnThis();
+      req.body = { pasword: "tadeo", email: "arlet@tadeo.com" };
+      req.params = { idUser: "10" };
+      UserModel.findByIdAndUpdate = jest.fn().mockResolvedValue(existingUser);
+
+      await userUpdate(req, res, null);
+
+      expect(UserModel.findByIdAndUpdate).toHaveBeenCalledWith(
+        req.params.idUser,
+        req.body,
+        {
+          new: true,
+        }
+      );
+      expect(res.json).toHaveBeenCalledWith(existingUser);
+    });
+  });
+  describe("When it'receives a wrong idUser", () => {
+    test("Then it should invoke next with an error", async () => {
+      const res = {} as Response;
+      const req = {} as Request;
+      req.body = { age: 10 };
+      req.params = { idUser: "1234" };
+      const error: {
+        message: string;
+        code?: number;
+      } = new Error();
+      error.code = 400;
+      error.message = "Don't change user";
+      const next = jest.fn();
+      UserModel.findByIdAndUpdate = jest.fn().mockRejectedValue(error);
+
+      await userUpdate(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });
