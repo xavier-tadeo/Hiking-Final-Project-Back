@@ -2,6 +2,10 @@ import express from "express";
 
 import HikingModel from "../../database/models/hiking";
 
+class ErrorCode extends Error {
+  code: number | undefined;
+}
+
 export const hikeCreate = async (
   req: express.Request,
   res: express.Response,
@@ -35,6 +39,28 @@ export const hikeGet = async (
   } catch (error) {
     error.code = 404;
     error.message = "Not found anything!";
+    next(error);
+  }
+};
+
+export const hikeDelete = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  const { hikeId } = req.params;
+  try {
+    const searchHike = await HikingModel.findByIdAndDelete(hikeId);
+    if (searchHike) {
+      res.json({ id: searchHike.id });
+    } else {
+      const error = new ErrorCode("Hike not Found");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.code = 400;
+    error.message = "Faild Request :(";
     next(error);
   }
 };
