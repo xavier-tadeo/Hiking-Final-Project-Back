@@ -1,5 +1,5 @@
 import express from "express";
-import { hikeCreate } from "../controllers/hikeController";
+import hikeCreate from "../controllers/hikeController";
 
 const router = express.Router();
 
