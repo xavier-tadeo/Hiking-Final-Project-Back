@@ -31,7 +31,7 @@ export const hikeGet = async (
 ) => {
   try {
     const hikingAll = await HikingModel.find();
-    res.status(202).json(hikingAll);
+    res.status(200).json(hikingAll);
   } catch (error) {
     error.code = 404;
     error.message = "Not found anything!";
