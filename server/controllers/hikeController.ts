@@ -2,7 +2,7 @@ import express from "express";
 
 import HikingModel from "../../database/models/hiking";
 
-const hikeCreate = async (
+export const hikeCreate = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -38,5 +38,3 @@ export const hikeGet = async (
     next(error);
   }
 };
-
-export default hikeCreate;
