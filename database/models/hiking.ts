@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 interface Stadistics {
   distance: string;
@@ -11,7 +11,7 @@ interface Hiking {
   description: string;
   map: number;
   images: Array<string>;
-
+  user: object;
   stadistics: Stadistics;
 }
 
@@ -20,7 +20,7 @@ const hikingSchema: Schema<Hiking> = new Schema({
   description: { type: String, required: true },
   map: { type: Number, required: true },
   images: { type: [String], required: true },
-
+  user: { type: [Types.ObjectId] },
   stadistics: {
     distance: { type: String, require: true },
     time: { type: String, require: true },

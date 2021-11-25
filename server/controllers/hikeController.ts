@@ -34,7 +34,10 @@ export const hikeGet = async (
   next: express.NextFunction
 ) => {
   try {
-    const hikingAll = await HikingModel.find();
+    const hikingAll = await HikingModel.find().populate({
+      path: "user",
+      select: "name",
+    });
     res.status(200).json(hikingAll);
   } catch (error) {
     error.code = 404;
