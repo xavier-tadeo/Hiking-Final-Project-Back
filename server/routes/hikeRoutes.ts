@@ -6,10 +6,12 @@ import {
   hikeGetOne,
   hikeUpdate,
 } from "../controllers/hikeController";
+import firebase from "../middlewares/firebase";
+import upload from "../middlewares/upload";
 
 const router = express.Router();
 
-router.post("/create", hikeCreate);
+router.post("/create", upload.single("images"), firebase, hikeCreate);
 router.get("/get", hikeGet);
 router.delete("/delete/:hikeId", hikeDelete);
 router.patch("/update/:hikeId", hikeUpdate);
