@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import HikingModel from "../../database/models/hiking";
-import { hikeCreate, hikeGet } from "./hikeController";
+import { hikeCreate, hikeDelete, hikeGet } from "./hikeController";
 
 const mockResponse = () => {
   const res = {} as Response;
@@ -29,6 +29,7 @@ describe("Given hikeGet function", () => {
       expect(res.json).toBeCalledWith(hiking);
     });
   });
+
   describe("When don t receives a array", () => {
     test("It should invoke the next function with a error", async () => {
       const res = mockResponse();
@@ -74,6 +75,7 @@ describe("Given hikeCreate function", () => {
       expect(res.status).toHaveBeenCalledWith(status);
     });
   });
+
   describe("When reject promese", () => {
     test("It should invoke the next function with error, code 400 and message 'Bad create routes'", async () => {
       const requestBody = {
@@ -99,6 +101,60 @@ describe("Given hikeCreate function", () => {
         "message",
         "Bad create routes"
       );
+    });
+  });
+});
+
+describe("Given a hikeDelete function", () => {
+  describe("When it receives a req with params and this hike existing", () => {
+    test("Then should invoke res.json with id hike and delete it", async () => {
+      const req = {} as Request;
+      req.params = { hikeId: "10" };
+      const res = mockResponse();
+
+      HikingModel.findByIdAndDelete = jest.fn().mockResolvedValue({});
+
+      await hikeDelete(req, res, null);
+
+      expect(HikingModel.findByIdAndDelete).toHaveBeenCalledWith(
+        req.params.hikeId
+      );
+    });
+  });
+
+  describe("When it receives a req with params but this don t exist", () => {
+    test("Then should invoke next with error", async () => {
+      const req = {} as Request;
+      req.params = { hikeId: "10" };
+      const next = jest.fn();
+      const error = new CodeError("Hike not Found");
+      error.code = 404;
+
+      HikingModel.findByIdAndDelete = jest.fn().mockResolvedValue(null);
+
+      await hikeDelete(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+    });
+  });
+
+  describe("When request it s fail", () => {
+    test("Then should invoke next function with message Faild Request and code 400", async () => {
+      const req = {} as Request;
+      req.params = { hikeId: "10" };
+      const next = jest.fn();
+      const error = new CodeError("Faild Request :(");
+      error.code = 400;
+
+      HikingModel.findByIdAndDelete = jest.fn().mockRejectedValue(new Error());
+
+      await hikeDelete(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
     });
   });
 });
