@@ -20,7 +20,9 @@ describe("Given hikeGet function", () => {
       const res = mockResponse();
       const next = jest.fn();
 
-      HikingModel.find = jest.fn().mockResolvedValue([{}, {}]);
+      HikingModel.find = jest
+        .fn()
+        .mockReturnValue({ populate: jest.fn().mockResolvedValue(hiking) });
 
       await hikeGet(null, res, next);
 
@@ -37,7 +39,7 @@ describe("Given hikeGet function", () => {
 
       await hikeGet(null, res, next);
 
-      expect(next).toHaveBeenCalledWith(error);
+      expect(next).toHaveBeenCalled();
       expect(next.mock.calls[0][0]).toHaveProperty(
         "message",
         "Not found anything!"
