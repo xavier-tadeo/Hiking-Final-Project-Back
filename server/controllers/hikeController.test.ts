@@ -1,6 +1,12 @@
 import { Response, Request } from "express";
 import HikingModel from "../../database/models/hiking";
-import { hikeCreate, hikeDelete, hikeGet, hikeUpdate } from "./hikeController";
+import {
+  hikeCreate,
+  hikeDelete,
+  hikeGet,
+  hikeGetOne,
+  hikeUpdate,
+} from "./hikeController";
 
 const mockResponse = () => {
   const res = {} as Response;
@@ -79,7 +85,7 @@ describe("Given hikeCreate function", () => {
   describe("When reject promese", () => {
     test("It should invoke the next function with error, code 400 and message 'Bad create routes'", async () => {
       const requestBody = {
-        tattooStyles: "realista",
+        hikeTitle: "Guinardo",
         image: "url",
       };
 
@@ -195,6 +201,22 @@ describe("Given a hikeUpdate function", () => {
       await hikeUpdate(req, null, next);
 
       expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a hikeGetOne function", () => {
+  describe("When it receives a req.params with id hike", () => {
+    test("Then it should invoke res.json with hike id", async () => {
+      const hike = { id: "10", name: "Guinardo new excursion" };
+      const res = mockResponse();
+      const req = {} as Request;
+      req.params = { hikeId: "10" };
+      HikingModel.findById = jest.fn().mockResolvedValue(hike);
+
+      await hikeGetOne(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(hike);
     });
   });
 });
