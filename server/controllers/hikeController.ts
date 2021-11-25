@@ -11,7 +11,7 @@ export const hikeCreate = async (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const { title, description, map, stadistics, images } = req.body;
+  const { title, description, map, stadistics, images, userId } = req.body;
   try {
     const newHike = await HikingModel.create({
       title,
@@ -19,6 +19,7 @@ export const hikeCreate = async (
       map,
       images,
       stadistics,
+      userId,
     });
     res.status(201).json(newHike);
   } catch (error) {
