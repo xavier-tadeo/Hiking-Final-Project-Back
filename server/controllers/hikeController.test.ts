@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import HikingModel from "../../database/models/hiking";
-import { hikeCreate, hikeDelete, hikeGet } from "./hikeController";
+import { hikeCreate, hikeDelete, hikeGet, hikeUpdate } from "./hikeController";
 
 const mockResponse = () => {
   const res = {} as Response;
@@ -155,6 +155,30 @@ describe("Given a hikeDelete function", () => {
       expect(next).toHaveBeenCalledWith(error);
       expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
       expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+    });
+  });
+});
+
+describe("Given a hikeUpdate function", () => {
+  describe("When it receives a req with params id", () => {
+    test("Then it should invoke res.json with a hike change", async () => {
+      const hike = { id: "10", name: "Guinardo new excursion" };
+      const res = mockResponse();
+      const req = {} as Request;
+      req.body = { name: "new name" };
+      req.params = { hikeId: "10" };
+      HikingModel.findByIdAndUpdate = jest.fn().mockResolvedValue(hike);
+
+      await hikeUpdate(req, res, null);
+
+      expect(HikingModel.findByIdAndUpdate).toHaveBeenCalledWith(
+        req.params.hikeId,
+        req.body,
+        {
+          new: true,
+        }
+      );
+      expect(res.json).toHaveBeenCalledWith(hike);
     });
   });
 });
