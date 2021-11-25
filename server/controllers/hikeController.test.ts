@@ -181,4 +181,20 @@ describe("Given a hikeUpdate function", () => {
       expect(res.json).toHaveBeenCalledWith(hike);
     });
   });
+
+  describe("When it receives a request without hikeId", () => {
+    test("Then it should invoke the next function with a error", async () => {
+      const req = {} as Request;
+      req.params = { hikeId: "666" };
+      const error = new CodeError();
+      error.code = 404;
+      error.message = "Not found hike???";
+      const next = jest.fn();
+      HikingModel.findByIdAndUpdate = jest.fn().mockRejectedValue(new Error());
+
+      await hikeUpdate(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
 });
