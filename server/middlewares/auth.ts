@@ -1,14 +1,22 @@
 import dotenv from "dotenv";
+import express from "express";
 
 dotenv.config();
 
 import jwt from "jsonwebtoken";
 
+interface RequestAuth extends express.Request {
+  userId?: string;
+}
 class ErrorCode extends Error {
   code: number | undefined;
 }
 
-const auth = (req, res, next) => {
+const auth = (
+  req: RequestAuth,
+  res: express.Response,
+  next: express.NextFunction
+) => {
   const authHeader = req.header("Authorization");
   if (!authHeader) {
     const error = new ErrorCode("Error!Stop!");
@@ -22,8 +30,8 @@ const auth = (req, res, next) => {
       next(error);
     } else {
       try {
-        const { id } = jwt.verify(token, process.env.SECRET);
-        req.userId = { id };
+        const user = jwt.verify(token, process.env.SECRET);
+        req.userId = user.id;
         next();
       } catch {
         const error = new ErrorCode("Wrong!!!Stop");
