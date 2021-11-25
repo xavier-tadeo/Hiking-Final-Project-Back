@@ -82,3 +82,19 @@ export const hikeUpdate = async (
     next(error);
   }
 };
+
+export const hikeGetOne = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  const { hikeId } = req.params;
+  try {
+    const searchHike = await HikingModel.findById(hikeId);
+    res.json(searchHike);
+  } catch (error) {
+    error.code = 404;
+    error.message = "Not found anything!";
+    next(error);
+  }
+};
