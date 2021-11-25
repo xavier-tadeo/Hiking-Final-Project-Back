@@ -22,7 +22,7 @@ const auth = (req, res, next) => {
       next(error);
     } else {
       try {
-        const { id } = jwt.verify(token, process.env.JWT_SECRET);
+        const { id } = jwt.verify(token, process.env.SECRET);
         req.userId = { id };
         next();
       } catch {
