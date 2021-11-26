@@ -16,7 +16,6 @@ export const hikeCreate = async (
   next: express.NextFunction
 ) => {
   const hikeBody = req.body;
-  hikeBody.images = req.file.fileURL;
   try {
     const newHike = await HikingModel.create({
       ...hikeBody,

@@ -62,13 +62,15 @@ describe("Given hikeCreate function", () => {
         title: "Guinardo",
         description: "Muy buena ruta",
         map: 543445,
-        images: ["url"],
+        images: "url",
         stadistics: 5,
       };
+
       const body: any = reqBody;
       const req = {
         body,
       } as Request;
+
       const res = mockResponse();
       const status = 201;
       const next = jest.fn();

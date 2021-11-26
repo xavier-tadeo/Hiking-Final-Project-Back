@@ -15,7 +15,8 @@ const firebase = async (req, res, next) => {
   await bucket.file(req.file.filename).makePublic();
   const fileURL = bucket.file(req.file.filename).publicUrl();
   debug(chalk.green(fileURL));
-  req.file.fileURL = fileURL;
+  // req.file.fileURL = fileURL;
+  req.body.images = fileURL;
   next();
 };
 
