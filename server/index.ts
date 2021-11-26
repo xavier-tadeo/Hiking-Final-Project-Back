@@ -12,12 +12,12 @@ import hikeRoutes from "./routes/hikeRoutes";
 
 const debug = Debug("hiking:server");
 
-const app = express();
+export const app = express();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 
-const initializeServer = (port) =>
+export const initializeServer = (port) =>
   new Promise((resolve) => {
     const server = app.listen(port, () => {
       debug(chalk.green(`¡Escuchando en ${port}! ʕ•ᴥ•ʔﾉ♡`));
@@ -37,5 +37,3 @@ app.use("/hike", hikeRoutes);
 
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
-
-export default initializeServer;
