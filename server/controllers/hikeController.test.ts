@@ -203,6 +203,8 @@ describe("Given a hikeUpdate function", () => {
       await hikeUpdate(req, null, next);
 
       expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
     });
   });
 });
@@ -219,6 +221,24 @@ describe("Given a hikeGetOne function", () => {
       await hikeGetOne(req, res, null);
 
       expect(res.json).toHaveBeenCalledWith(hike);
+    });
+  });
+  describe("When it receives a bad reques id user", () => {
+    test("Then it should invoke the function next with error", async () => {
+      const req = {} as Request;
+      req.params = { hikeId: "1" };
+      const next = jest.fn();
+      const error = new CodeError();
+      error.code = 400;
+      error.message = "Not found anything!";
+
+      HikingModel.findById = jest.fn().mockRejectedValue(error);
+
+      await hikeGetOne(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
     });
   });
 });
