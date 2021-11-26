@@ -1,12 +1,14 @@
 import express from "express";
 
 import HikingModel from "../../database/models/hiking";
+import UserModel from "../../database/models/user";
 
 class ErrorCode extends Error {
   code: number | undefined;
 }
 interface RequestAuth extends express.Request {
   userId?: string;
+  name?: string;
   file?: any;
 }
 
@@ -28,7 +30,7 @@ export const hikeCreate = async (
     next(error);
   }
 };
-
+UserModel.find();
 export const hikeGet = async (
   req: express.Request,
   res: express.Response,

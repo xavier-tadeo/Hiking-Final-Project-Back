@@ -28,7 +28,7 @@ const hikingSchema: Schema<Hiking> = new Schema({
     longitude: { type: Number, required: true },
   },
   images: { type: String, required: true },
-  user: { type: Schema.Types.ObjectId },
+  user: { type: Schema.Types.ObjectId, ref: "user" },
   stadistics: {
     distance: { type: String, require: true },
     time: { type: String, require: true },
