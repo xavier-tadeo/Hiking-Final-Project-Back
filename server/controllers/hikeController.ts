@@ -5,21 +5,21 @@ import HikingModel from "../../database/models/hiking";
 class ErrorCode extends Error {
   code: number | undefined;
 }
+interface RequestAuth extends express.Request {
+  userId?: string;
+  file?: any;
+}
 
 export const hikeCreate = async (
-  req: express.Request,
+  req: RequestAuth,
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const { title, description, map, stadistics, images, userId } = req.body;
+  const hikeBody = req.body;
   try {
     const newHike = await HikingModel.create({
-      title,
-      description,
-      map,
-      images,
-      stadistics,
-      userId,
+      ...hikeBody,
+      user: req.userId,
     });
     res.status(201).json(newHike);
   } catch (error) {
