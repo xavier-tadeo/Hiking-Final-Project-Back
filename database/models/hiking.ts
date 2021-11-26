@@ -6,10 +6,15 @@ interface Stadistics {
   elevation: string;
   dificulty: number;
 }
+
+interface Maping {
+  latitude: number;
+  longitude: number;
+}
 interface Hiking {
   title: string;
   description: string;
-  map: number;
+  map: Maping;
   images: string;
   user: ObjectId;
   stadistics: Stadistics;
@@ -18,7 +23,10 @@ interface Hiking {
 const hikingSchema: Schema<Hiking> = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
-  map: { type: Number, required: true },
+  map: {
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true },
+  },
   images: { type: String, required: true },
   user: { type: Schema.Types.ObjectId },
   stadistics: {
