@@ -13,7 +13,7 @@ import auth from "../middlewares/auth";
 
 const router = express.Router();
 
-router.post("/create", auth, upload.single("images"), firebase, hikeCreate);
+router.post("/create", auth, upload.array("images"), firebase, hikeCreate);
 router.get("/get", hikeGet);
 router.delete("/delete/:hikeId", auth, hikeDelete);
 router.patch("/update/:hikeId", auth, hikeUpdate);
