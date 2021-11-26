@@ -15,7 +15,7 @@ interface Hiking {
   title: string;
   description: string;
   map: Maping;
-  images: string;
+  images: [string];
   user: ObjectId;
   stadistics: Stadistics;
 }
@@ -27,7 +27,7 @@ const hikingSchema: Schema<Hiking> = new Schema({
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },
   },
-  images: { type: String, required: true },
+  images: { type: [String], required: true },
   user: { type: Schema.Types.ObjectId, ref: "user" },
   stadistics: {
     distance: { type: String, require: true },
