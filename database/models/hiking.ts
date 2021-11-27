@@ -1,23 +1,24 @@
 import { Schema, model, ObjectId } from "mongoose";
 
-interface Stadistics {
+export interface Stadistics {
   distance: string;
   time: string;
   elevation: string;
   dificulty: number;
 }
 
-interface Maping {
+export interface Maping {
   latitude: number;
   longitude: number;
 }
-interface Hiking {
+export interface Hiking {
   title: string;
   description: string;
   map: Maping;
   images: [string];
   user: ObjectId;
   stadistics: Stadistics;
+  _id: string;
 }
 
 const hikingSchema: Schema<Hiking> = new Schema({

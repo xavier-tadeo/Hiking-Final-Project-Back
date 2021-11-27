@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction } from "express";
 
 export interface RequestWithAuth extends express.Request {
   email?: string;
@@ -10,7 +10,11 @@ class ErrorCode extends Error {
   code: number | undefined;
 }
 
-const checkUser = async (req: RequestWithAuth, res: express.Response, next) => {
+const checkUser = async (
+  req: RequestWithAuth,
+  res: express.Response,
+  next: NextFunction
+) => {
   const { idUser } = req.params;
   if (idUser === req.userId) {
     return next();

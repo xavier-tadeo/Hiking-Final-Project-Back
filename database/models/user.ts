@@ -1,4 +1,5 @@
 import { Schema, model, Types } from "mongoose";
+import { Hiking } from "./hiking";
 
 interface User {
   name: string;
@@ -6,7 +7,7 @@ interface User {
   email: string;
   somethingAboutYou?: string;
   favorite?: Array<string>;
-  yourRoutes?: Array<string>;
+  yourRoutes?: Array<Hiking>;
 }
 
 const userSchema: Schema<User> = new Schema({
