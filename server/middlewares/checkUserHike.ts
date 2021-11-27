@@ -20,6 +20,7 @@ const checkUserHike = async (
   const { hikeId } = req.params;
   const user = await UserModel.findById(req.userId);
   const findIdRoute = user.yourRoutes.find(
+    // eslint-disable-next-line no-underscore-dangle
     (routeId) => routeId._id.toString() === hikeId
   );
 
