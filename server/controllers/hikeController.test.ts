@@ -1,5 +1,7 @@
 import { Response, Request } from "express";
+
 import HikingModel from "../../database/models/hiking";
+import UserModel from "../../database/models/user";
 import {
   hikeCreate,
   hikeDelete,
@@ -7,6 +9,8 @@ import {
   hikeGetOne,
   hikeUpdate,
 } from "./hikeController";
+
+jest.setTimeout(20000);
 
 const mockResponse = () => {
   const res = {} as Response;
@@ -76,6 +80,10 @@ describe("Given hikeCreate function", () => {
       const next = jest.fn();
 
       HikingModel.create = jest.fn().mockResolvedValue(reqBody);
+      UserModel.findById = jest.fn().mockResolvedValue({
+        save: jest.fn(),
+        yourRoutes: { push: jest.fn() },
+      });
 
       await hikeCreate(req, res, next);
 
