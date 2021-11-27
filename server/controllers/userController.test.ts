@@ -10,9 +10,21 @@ import UserModel from "../../database/models/user";
 import {
   userCreate,
   userDelete,
+  userGetOne,
   userLogin,
   userUpdate,
 } from "./userController";
+
+const mockResponse = () => {
+  const res = {} as Response;
+  res.status = jest.fn().mockReturnThis();
+  res.json = jest.fn().mockReturnThis();
+  return res;
+};
+
+class CodeError extends Error {
+  code: number | undefined;
+}
 
 jest.mock("../../database/models/user");
 jest.mock("bcrypt");
@@ -226,6 +238,41 @@ describe("Given userUpdate function", () => {
       await userUpdate(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a userGetOne function", () => {
+  describe("When it receives a req.params with id user", () => {
+    test("Then it should invoke res.json with user id", async () => {
+      const user = { id: "10" };
+      const res = mockResponse();
+      const req = {} as Request;
+      req.params = { idUser: "10" };
+      UserModel.findById = jest.fn().mockResolvedValue(user);
+
+      await userGetOne(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(user);
+    });
+  });
+
+  describe("When it receives a bad reques id user", () => {
+    test("Then it should invoke the function next with error", async () => {
+      const req = {} as Request;
+      req.params = { hikeId: "1" };
+      const next = jest.fn();
+      const error = new CodeError();
+      error.code = 400;
+      error.message = "Not found user";
+
+      UserModel.findById = jest.fn().mockRejectedValue(error);
+
+      await userGetOne(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
     });
   });
 });
