@@ -3,6 +3,7 @@ import express from "express";
 import {
   userCreate,
   userDelete,
+  userGetOne,
   userLogin,
   userUpdate,
 } from "../controllers/userController";
@@ -15,5 +16,6 @@ router.post("/register", userCreate);
 router.post("/login", userLogin);
 router.delete("/delete/:idUser", auth, checkUser, userDelete);
 router.patch("/update/:idUser", auth, checkUser, userUpdate);
+router.get("/oneUser/:idUser", auth, checkUser, userGetOne);
 
 export default router;
