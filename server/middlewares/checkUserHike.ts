@@ -25,6 +25,9 @@ const checkUserHike = async (
   );
 
   if (findIdRoute) {
+    const hikes = user.yourRoutes.filter((hike) => hike !== findIdRoute);
+    user.yourRoutes = hikes;
+    user.save();
     next();
   } else {
     const error = new ErrorCode();
