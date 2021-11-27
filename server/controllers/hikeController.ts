@@ -23,6 +23,10 @@ export const hikeCreate = async (
       ...hikeBody,
       user: req.userId,
     });
+    const user = await UserModel.findById(req.userId);
+    // eslint-disable-next-line no-underscore-dangle
+    user.yourRoutes.push(newHike._id);
+    await user.save();
     res.status(201).json(newHike);
   } catch (error) {
     error.code = 400;
@@ -30,17 +34,14 @@ export const hikeCreate = async (
     next(error);
   }
 };
-UserModel.find();
+
 export const hikeGet = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    const hikingAll = await HikingModel.find().populate({
-      path: "user",
-      select: "name",
-    });
+    const hikingAll = await HikingModel.find().populate("user", "name");
     res.status(200).json(hikingAll);
   } catch (error) {
     error.code = 404;
