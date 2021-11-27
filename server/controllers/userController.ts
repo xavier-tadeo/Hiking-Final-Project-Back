@@ -4,6 +4,7 @@ dotenv.config();
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import express from "express";
+
 import UserModel from "../../database/models/user";
 
 class ErrorCode extends Error {
@@ -85,6 +86,22 @@ export const userUpdate = async (
   } catch (error) {
     error.code = 404;
     error.message = "Don't change user";
+    next(error);
+  }
+};
+
+export const userGetOne = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  const { idUser } = req.params;
+  try {
+    const findUser = await UserModel.findById(idUser);
+    res.json(findUser);
+  } catch (error) {
+    error.code = 404;
+    error.message = "Not found user";
     next(error);
   }
 };
