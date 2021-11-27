@@ -2,7 +2,7 @@ import express from "express";
 
 export interface RequestWithAuth extends express.Request {
   email?: string;
-  idUser?: string;
+  userId?: string;
   name?: string;
 }
 
@@ -12,7 +12,7 @@ class ErrorCode extends Error {
 
 const checkUser = async (req: RequestWithAuth, res: express.Response, next) => {
   const { idUser } = req.params;
-  if (req.idUser === idUser) {
+  if (idUser === req.userId) {
     return next();
   }
   const error = new ErrorCode();
