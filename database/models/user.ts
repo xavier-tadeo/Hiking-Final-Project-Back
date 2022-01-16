@@ -1,5 +1,4 @@
 import { Schema, model, Types } from "mongoose";
-import { Hiking } from "./hiking";
 
 interface User {
   name: string;
@@ -7,7 +6,7 @@ interface User {
   email: string;
   somethingAboutYou?: string;
   favorite?: Array<string>;
-  yourRoutes?: Array<Hiking>;
+  yourRoutes?: Object;
 }
 
 const userSchema: Schema<User> = new Schema({
@@ -16,7 +15,7 @@ const userSchema: Schema<User> = new Schema({
   email: { type: String, required: true },
   somethingAboutYou: { type: String },
   favorite: { type: [Types.ObjectId] },
-  yourRoutes: { type: [Types.ObjectId] },
+  yourRoutes: { type: { type: Schema.Types.ObjectId, ref: "hiking" } },
 });
 
 const UserModel = model<User>("user", userSchema, "users");
