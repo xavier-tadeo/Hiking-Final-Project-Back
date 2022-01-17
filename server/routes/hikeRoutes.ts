@@ -10,13 +10,12 @@ import {
 import firebase from "../middlewares/firebase";
 import upload from "../middlewares/upload";
 import auth from "../middlewares/auth";
-import checkUserHike from "../middlewares/checkUserHike";
 
 const router = express.Router();
 
 router.post("/create", auth, upload.array("images"), firebase, hikeCreate);
 router.get("/get", hikeGet);
-router.delete("/delete/:hikeId", auth, checkUserHike, hikeDelete);
+router.delete("/delete/:hikeId", auth, hikeDelete);
 router.patch("/update/:hikeId", auth, hikeUpdate);
 router.get("/get/:hikeId", hikeGetOne);
 
