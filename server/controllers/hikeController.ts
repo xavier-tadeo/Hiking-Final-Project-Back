@@ -23,9 +23,12 @@ export const hikeCreate = async (
       ...hikeBody,
       user: req.userId,
     });
+
     const user = await UserModel.findById(req.userId);
     // eslint-disable-next-line no-underscore-dangle
-    user.yourRoutes.push(newHike._id);
+
+    user.yourRoutes.push(newHike.title);
+
     await user.save();
     res.status(201).json(newHike);
   } catch (error) {
